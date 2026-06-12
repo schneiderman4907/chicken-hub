@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken hub</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">Chicken hub</div>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Boards</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content-container">
+
+    <aside class="sidebar">
+        <h2>Featured Content</h2>
+        <ul id="boardList"></ul>
+    </aside>
+
+    <section class="video-grid" id="pinGrid"></section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 Auto-Aggregated Gallery</p>
+</footer>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Aggregated Gallery</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+<script>
+async function loadData() {
+    const response = await fetch("pinterest_data.json");
+    const data = await response.json();
+
+    console.log(data); // OK
+
+    const pinGrid = document.getElementById("pinGrid");
+    pinGrid.innerHTML = "";
+
+   data.forEach(pin => {
+    const card = document.createElement('div');
+    card.className = 'video-card';
+
+    card.innerHTML = `
+        <div class="img-wrapper">
+            <img 
+                class="thumb blur"
+                src="${pin.image}"
+                alt="${pin.keyword}"
+                loading="lazy"
+            >
+        </div>
+
+        <div class="video-info">
+            <h4>${pin.keyword}</h4>
+            <p>${pin.text}</p>
+        </div>
+    `;
+
+    pinGrid.appendChild(card);
+});
+document.querySelectorAll(".thumb").forEach(img => {
+    if (img.complete) {
+        img.classList.add("loaded");
+    } else {
+        img.addEventListener("load", () => {
+            img.classList.add("loaded");
+        });
+    }
+});
+}
+
+loadData();
+// initial load
+loadData();
+
+// auto refresh without full page reload spam
+setInterval(loadData, 30000);
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
